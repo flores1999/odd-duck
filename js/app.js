@@ -3,7 +3,7 @@
 // *** globals ***
 
 let voteCount = 25;
-let newProductArry = [];
+let newProductArray = [];
 
 // *** dom windows ***
 
@@ -12,7 +12,9 @@ let imgOne = document.getElementById('img-1');
 let imgTwo = document.getElementById('img-2');
 let imgThree = document.getElementById('img-3');
 let resultsBtn = document.getElementById('get-results-bnt');
-let resultsList = document.getElementById('results-containe');
+
+// *** CANVAS ELEMENT ***
+let ctx = document.getElementById('myChart');
 
 // *** constructor function ***
 
@@ -25,34 +27,76 @@ function NewProducts(name, imageExtenstion = 'jpg') {
 }
 
 // *** helper fucctions/utilites ***
-// To do : changne random to index 
-function randomImg() {
-  return Math.floor(Math.random() * newProductArry.length);
+
+function index() {
+  return Math.floor(Math.random() * newProductArray.length);
 }
 
-function renderImgs() {
-  let imgOneIndex = randomImg();
-  let imgTwoIndex = randomImg();
-  let imgThreeIndex = randomImg();
 
-  while (imgOneIndex === imgTwoIndex === imgThreeIndex) {
-    imgTwoIndex = randomImg();
-    imgThreeIndex = randomImg();
+
+function renderImgs() {
+  let indexArray = [];
+  while (indexArray.length < 6) {
+    let randomImg = index();
+    if (!indexArray.includes(randomImg)){
+      indexArray.push(randomImg);
+    }
+  }
+  let imgOneIndex = indexArray.pop();
+  let imgTwoIndex = indexArray.pop();
+  let imgThreeIndex = indexArray.pop();
+
+
+  imgOne.src = newProductArray[imgOneIndex].image;
+  imgOne.title = newProductArray[imgOneIndex].name;
+
+  imgTwo.src = newProductArray[imgTwoIndex].image;
+  imgTwo.title = newProductArray[imgTwoIndex].name;
+
+  imgThree.src = newProductArray[imgThreeIndex].image;
+  imgThree.title = newProductArray[imgThreeIndex].name;
+
+  newProductArray[imgOneIndex].views++;
+  newProductArray[imgTwoIndex].views++;
+  newProductArray[imgThreeIndex].views++;
+}
+
+function renderChart() {
+  let productNames = [];
+  let productsViewed = [];
+  let votedOn = [];
+
+  for (let i = 0; i < newProductArray.length; i++) {
+    productNames.push(newProductArray[i].name);
+    votedOn.push(newProductArray[i].vote);
+    productsViewed.push(newProductArray[i].views);
+
   }
 
-  imgOne.src = newProductArry[imgOneIndex].image;
-  imgOne.title = newProductArry[imgOneIndex].name;
-
-  imgTwo.src = newProductArry[imgTwoIndex].image;
-  imgTwo.title = newProductArry[imgTwoIndex].name;
-
-  imgThree.src = newProductArry[imgThreeIndex].image;
-  imgThree = newProductArry[imgThreeIndex].name;
-
-  newProductArry[imgOneIndex].views++;
-  newProductArry[imgTwoIndex].views++;
-  newProductArry[imgThreeIndex].views++;
-
+  let chaertObj = {
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: 'Votes',
+        data: votedOn,
+        borderWidth: 1
+      },
+      {
+        label: 'views',
+        data: productsViewed,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+  new Chart(ctx, chaertObj);
 
 }
 
@@ -61,9 +105,9 @@ function renderImgs() {
 function imgClick(event) {
   let imgClicked = event.target.title;
 
-  for (let i = 0; i < newProductArry.length; i++) {
-    if (imgClicked === newProductArry[i].name) {
-      newProductArry[i].vote++;
+  for (let i = 0; i < newProductArray.length; i++) {
+    if (imgClicked === newProductArray[i].name) {
+      newProductArray[i].vote++;
       voteCount--;
       renderImgs();
     }
@@ -74,24 +118,19 @@ function imgClick(event) {
 }
 function handleResultsList() {
   if (voteCount === 0) {
-    for (let i = 0; i < newProductArry.lenrth; i++) {
-      let productList = document.createElement('li');
-      productList.textContent = `${newProductArry[i].name}-votes: ${newProductArry[i].vote} & views: ${newProductArry[i].views} `;
-
-      resultsList.appendChild(productList);
-    }
+    renderChart();
     resultsBtn.removeEventListener('click', handleResultsList);
   }
 }
 
 // *** executable  code ***
-let sweep = new NewProducts('sweep', 'img/sweep.png');
+let sweep = new NewProducts('sweep', 'png');
 let bag = new NewProducts('bag');
 let banana = new NewProducts('banana');
 let bathroom = new NewProducts('bathroom');
 let boots = new NewProducts('boots');
 let breakfast = new NewProducts('breakfast');
-let bubbleGum = new NewProducts('bubbleGum');
+let bubbleGum = new NewProducts('bubblegum');
 let chair = new NewProducts('chair');
 let cthulhu = new NewProducts('cthulhu');
 let dogDuck = new NewProducts('dog-duck');
@@ -103,13 +142,13 @@ let shark = new NewProducts('shark');
 let tauntaun = new NewProducts('tauntaun');
 let unicorn = new NewProducts('unicorn');
 let waterCan = new NewProducts('water-can');
-let winGlass = new NewProducts('win-glass');
+let winGlass = new NewProducts('wine-glass');
 
 
 
 
 
-newProductArry.push(sweep, bag, banana, bathroom, boots, breakfast, bubbleGum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, tauntaun, unicorn, waterCan, winGlass);
+newProductArray.push(sweep, bag, banana, bathroom, boots, breakfast, bubbleGum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, tauntaun, unicorn, waterCan, winGlass);
 
 renderImgs();
 
