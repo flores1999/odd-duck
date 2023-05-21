@@ -1,25 +1,43 @@
-body{
-  background-color: whitesmoke;
-  
+body {
+  background-color: darkgray;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-h1{
-  color: black;
-  font: optional;
-  font-size: 50px;
+
+h1 {
+  padding: 20px;
+  margin: 10px;
+  font-size: 32px;
+  text-align: center;
+  color: palevioletred;
 }
+
 h2{
-  color: black;
-  font-size: 25px;
+  padding: 20px;
+  margin: 10px;
+  font-size: 32px;
+  text-align: center;
+  color:palevioletred;
 }
 
-.img-all{
-  
-  };
 
 
+section {
+  padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}
 
-
-button{
-color:red
+section img:hover {
+  border:3px dotted palevioletred;
+  transition:350ms;
 
 }
+
+section img {
+  height: 20vw;
+  width: 20vw;
+  padding:5px;
+  margin: 5px;
+
+}
+
